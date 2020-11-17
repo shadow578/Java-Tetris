@@ -2,6 +2,8 @@ package tetris.core;
 
 import java.util.Random;
 
+import org.jnativehook.keyboard.NativeKeyEvent;
+
 import tetris.core.model.PlayField;
 import tetris.core.model.Renderer;
 import tetris.core.model.Shape;
@@ -23,6 +25,11 @@ public class TetrisGame
 	 * the renderer used to draw the field
 	 */
 	final Renderer renderer;
+	
+	/**
+	 * keyboard hook helper to read key down events
+	 */
+	final KeyboardHelper keyboard;
 
 	/**
 	 * a random number generator for the game
@@ -61,6 +68,7 @@ public class TetrisGame
 	{
 		field = new PlayField(w, h);
 		renderer = new TetrisRenderer(field);
+		keyboard = new KeyboardHelper();
 	}
 
 	/**
@@ -69,6 +77,13 @@ public class TetrisGame
 	 */
 	public void play() throws InterruptedException
 	{
+		// init keyboard hooks
+		if (!keyboard.init())
+		{
+			System.out.println("Error in keyboard initialization! Exiting game...");
+			return;
+		}
+		
 		// TODO: assign a random piece
 		currentPiece = new ShapeLine(field, 0, 0);
 		
@@ -92,10 +107,8 @@ public class TetrisGame
 	 */
 	void onUpdate()
 	{
-		// TODO: handle player movement
-		
-		//rotation yeah
-		currentPiece.rotate();
+		// handle left/right movement of the current piece
+		handleKeyInput();
 
 		// move the current piece down by one
 		if (!currentPiece.moveDown())
@@ -109,5 +122,32 @@ public class TetrisGame
 
 		// draw screen
 		renderer.draw(currentPiece);
+	}
+	
+	/**
+	 * handle keyboard intput of LEFT and RIGHT to move the current piece horizontally
+	 * @return did the piece collide while moving?
+	 */
+	boolean handleKeyInput()
+	{
+		// ignore keyboard input when no piece is falling
+		if (currentPiece == null)
+			return false;
+
+		// check rotate (up arrow and r)
+		if (keyboard.isDown(NativeKeyEvent.VC_UP) || keyboard.isDown(NativeKeyEvent.VC_R))
+			currentPiece.rotate();
+
+		// check LEFT movement (left arrow and a)
+		int move = 0;
+		if (keyboard.isDown(NativeKeyEvent.VC_LEFT) || keyboard.isDown(NativeKeyEvent.VC_A))
+			move = -1;
+
+		// check RIGHT movement (right arrow and d)
+		if (keyboard.isDown(NativeKeyEvent.VC_RIGHT) || keyboard.isDown(NativeKeyEvent.VC_D))
+			move = 1;
+
+		// move the current piece
+		return !currentPiece.moveHorizontal(move);
 	}
 }
