@@ -20,12 +20,12 @@ public class TetrisGame
 	 * the field to play on
 	 */
 	final PlayField field;
-	
+
 	/**
 	 * the renderer used to draw the field
 	 */
 	final Renderer renderer;
-	
+
 	/**
 	 * keyboard hook helper to read key down events
 	 */
@@ -83,10 +83,10 @@ public class TetrisGame
 			System.out.println("Error in keyboard initialization! Exiting game...");
 			return;
 		}
-		
-		// TODO: assign a random piece
-		currentPiece = new ShapeLine(field, 0, 0);
-		
+
+		// put the first piece
+		getNewPiece();
+
 		// run the main game loop
 		long sleepTargetMs = 1000 / TARGET_FRAMERATE;
 		while (!endGame)
@@ -115,15 +115,16 @@ public class TetrisGame
 		{
 			// collided while moving, place the piece at the current position
 			field.placeShape(currentPiece);
-			// TODO: get a new piece
+			getNewPiece();
 		}
 
 		// TODO: check for complete lines and add them to the score
 
 		// draw screen
+		System.out.printf("Score: %.2f", score);
 		renderer.draw(currentPiece);
 	}
-	
+
 	/**
 	 * handle keyboard intput of LEFT and RIGHT to move the current piece horizontally
 	 * @return did the piece collide while moving?
@@ -149,5 +150,13 @@ public class TetrisGame
 
 		// move the current piece
 		return !currentPiece.moveHorizontal(move);
+	}
+
+	/**
+	 * put a new piece into the currentPiece variable
+	 */
+	void getNewPiece()
+	{
+		currentPiece = new ShapeLine(field, 0, 0);
 	}
 }
