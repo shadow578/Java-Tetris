@@ -39,8 +39,10 @@ public class TetrisRenderer extends Renderer
 
 	/**
 	 * draw the play field
+	 * @param ms the currently moving shape
+	 * @param score the players score
 	 */
-	public void draw(Shape ms)
+	public void draw(Shape ms, double score)
 	{
 		/*
 		 Chars used for rendering, copy&paste: 
@@ -59,7 +61,7 @@ public class TetrisRenderer extends Renderer
 		drawHeader(canvas);
 
 		// then the score
-		drawScore(canvas, 12345678.92);
+		drawScore(canvas, score);
 
 		// draw the game field
 		for (int y = 0; y < field.getHeight(); y++)

@@ -14,6 +14,7 @@ public abstract class Renderer
 	/**
 	 * draw the play field
 	 * @param movingShape the current dynamic (moving) shape to draw on top of the game field
+	 * @param currentScore the player's current score
 	 */
-	public abstract void draw(Shape movingShape);
+	public abstract void draw(Shape movingShape, double currentScore);
 }

@@ -122,7 +122,7 @@ public class TetrisGame
 		score += field.removeCompleteLines() * 10;
 		
 		// draw screen
-		renderer.draw(currentPiece);
+		renderer.draw(currentPiece, score);
 	}
 
 	/**
