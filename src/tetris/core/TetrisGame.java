@@ -122,7 +122,6 @@ public class TetrisGame
 		score += field.removeCompleteLines() * 10;
 		
 		// draw screen
-		System.out.printf("Score: %.2f", score);
 		renderer.draw(currentPiece);
 	}
 
