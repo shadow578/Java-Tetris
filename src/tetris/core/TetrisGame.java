@@ -20,7 +20,7 @@ public class TetrisGame
 	 * how fast pieces fall (amount moved every frame)
 	 */
 	final double FALL_SPEED = 2.5 / TARGET_FRAMERATE;
-	
+
 	/**
 	 * the field to play on
 	 */
@@ -113,8 +113,23 @@ public class TetrisGame
 	void onUpdate()
 	{
 		// handle left/right movement of the current piece
-		handleKeyInput();
+		handlePieceMovement();
 
+		// move the piece down
+		handlePieceGravity();
+
+		// check for complete lines and add them to the score
+		score += field.removeCompleteLines() * 10;
+
+		// draw screen
+		renderer.draw(currentPiece, score);
+	}
+
+	/**
+	 * handles the falling of the current piece, aswell as the "instant fall" button
+	 */
+	void handlePieceGravity()
+	{
 		// move the current piece down by one
 		if (!currentPiece.moveDown(FALL_SPEED))
 		{
@@ -123,18 +138,24 @@ public class TetrisGame
 			getNewPiece();
 		}
 
-		// check for complete lines and add them to the score
-		score += field.removeCompleteLines() * 10;
-		
-		// draw screen
-		renderer.draw(currentPiece, score);
+		// if user pressed DOWN, move the current piece to it's final position
+		if (keyboard.wasPressed(NativeKeyEvent.VC_DOWN))
+		{
+			// move until a collision happens
+			while (currentPiece.moveDown(FALL_SPEED))
+				;
+
+			// collided while moving, place the piece at the current position
+			field.placeShape(currentPiece);
+			getNewPiece();
+		}
 	}
 
 	/**
 	 * handle keyboard intput of LEFT and RIGHT to move the current piece horizontally
 	 * @return did the piece collide while moving?
 	 */
-	boolean handleKeyInput()
+	boolean handlePieceMovement()
 	{
 		// ignore keyboard input when no piece is falling
 		if (currentPiece == null)

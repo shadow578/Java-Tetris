@@ -36,7 +36,8 @@ public class KeyboardHelper
 	}
 
 	/**
-	 * check if the given key is down
+	 * check if the given key is currently down.
+	 * Stays true for as long as the key is held.
 	 * @param keyCode the keycode of the key to check. See {@code NativeKeyEvent} for a list of keycodes
 	 * @return is the key down?
 	 */
@@ -44,7 +45,23 @@ public class KeyboardHelper
 	{
 		return downKeyCodes.contains(keyCode);
 	}
-	
+
+	/**
+	 * check if the given key was pressed
+	 * returns true ONLY once until the key is pressed the next time
+	 * @param keyCode the keycode of the key to check. See {@code NativeKeyEvent} for a list of keycodes
+	 * @return was the key pressed?
+	 */
+	public boolean wasPressed(int keyCode)
+	{
+		if (downKeyCodes.contains(keyCode))
+		{
+			downKeyCodes.remove((Integer) keyCode);
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * disable JNativeHook's log entries.
 	 * Taken from https://github.com/kwhat/jnativehook/issues/307#issuecomment-695764248
