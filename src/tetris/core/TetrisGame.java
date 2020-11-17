@@ -14,8 +14,13 @@ public class TetrisGame
 	/**
 	 * the target frame- / updaterate to run the game at
 	 */
-	final int TARGET_FRAMERATE = 5;
+	final int TARGET_FRAMERATE = 10;
 
+	/**
+	 * how fast pieces fall (amount moved every frame)
+	 */
+	final double FALL_SPEED = 2.5 / TARGET_FRAMERATE;
+	
 	/**
 	 * the field to play on
 	 */
@@ -111,7 +116,7 @@ public class TetrisGame
 		handleKeyInput();
 
 		// move the current piece down by one
-		if (!currentPiece.moveDown())
+		if (!currentPiece.moveDown(FALL_SPEED))
 		{
 			// collided while moving, place the piece at the current position
 			field.placeShape(currentPiece);

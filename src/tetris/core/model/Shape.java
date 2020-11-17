@@ -10,7 +10,7 @@ public abstract class Shape
 	/**
 	 * the position of the shape
 	 */
-	int x, y;
+	double x, y;
 
 	/**
 	 * rotation of this shape, in degree (0 - 270)
@@ -36,7 +36,7 @@ public abstract class Shape
 	 */
 	public int getX()
 	{
-		return x;
+		return (int)x;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public abstract class Shape
 	 */
 	public int getY()
 	{
-		return y;
+		return (int)y;
 	}
 
 	/**
@@ -91,17 +91,18 @@ public abstract class Shape
 
 	/**
 	 * try to move the block down by one
+	 * @param howMuch by how much to move down. used to change the speed we move at
 	 * @return was the move successfull? if false, we probably collided with something
 	 */
-	public boolean moveDown()
+	public boolean moveDown(double howMuch)
 	{
 		// move down and check for collision
-		y++;
+		y += howMuch;
 		if (!field.checkCollision(this))
 			return true;
 
 		// we collided, undo movement
-		y--;
+		y -= howMuch;
 		return false;
 	}
 
@@ -112,7 +113,7 @@ public abstract class Shape
 	 * @param amount the amount to move
 	 * @return was the move successfull? if false, we probably collided with something
 	 */
-	public boolean moveHorizontal(int amount)
+	public boolean moveHorizontal(double amount)
 	{
 		// move and check for collision
 		x += amount;
