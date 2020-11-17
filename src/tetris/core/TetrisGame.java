@@ -118,8 +118,9 @@ public class TetrisGame
 			getNewPiece();
 		}
 
-		// TODO: check for complete lines and add them to the score
-
+		// check for complete lines and add them to the score
+		score += field.removeCompleteLines() * 10;
+		
 		// draw screen
 		System.out.printf("Score: %.2f", score);
 		renderer.draw(currentPiece);

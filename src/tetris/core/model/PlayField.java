@@ -179,6 +179,49 @@ public class PlayField
 		// no collision found
 		return false;
 	}
+	
+	/**
+	 * remove all complete lines and mvoe all blocks above down by one
+	 * @return the number of full lines removed
+	 */
+	public int removeCompleteLines()
+	{
+		// check all lines in reverse order
+		int lns = 0;
+		for (int y = getHeight() - 1; y >= 0; y--)
+		{
+			// check this line is complete
+			// if there is ANY blank in this line, it cannot be complete
+			boolean isLineComplete = true;
+			for (int x = 0; x < getWidth(); x++)
+				if (isBlank(x, y))
+					isLineComplete = false;
+
+			// skip if this line is NOT complete
+			if (!isLineComplete)
+				continue;
+
+			// the line is complete, move all above lines down by one
+			// also count this line into the completed lines removed
+			lns++;
+
+			// move lines above this one down by one
+			for (int movY = y; movY >= 0; movY--)
+				for (int x = 0; x < getWidth(); x++)
+					if (movY > 0)
+						set(x, movY, get(x, movY - 1)); // not at the topmost line, copy line above down
+					else
+						set(x, movY, BLANK); // we copy into the topmost line: fill it blank because there are no lines above
+												// the topmost line
+
+			// done with this line, but recheck again
+			// this is required because we may have moved down a line that is also complete,
+			// which would go unchecked if we don't recheck
+			y++;
+		}
+
+		return lns;
+	}
 
 	/**
 	 * check if the x/y point is out ouf bounds of the play field
