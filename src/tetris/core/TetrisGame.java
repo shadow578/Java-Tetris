@@ -3,7 +3,9 @@ package tetris.core;
 import java.util.Random;
 
 import tetris.core.model.PlayField;
+import tetris.core.model.Renderer;
 import tetris.core.model.Shape;
+import tetris.core.shapes.ShapeLine;
 
 public class TetrisGame
 {
@@ -16,6 +18,11 @@ public class TetrisGame
 	 * the field to play on
 	 */
 	final PlayField field;
+	
+	/**
+	 * the renderer used to draw the field
+	 */
+	final Renderer renderer;
 
 	/**
 	 * a random number generator for the game
@@ -53,6 +60,7 @@ public class TetrisGame
 	public TetrisGame(int w, int h)
 	{
 		field = new PlayField(w, h);
+		renderer = new TetrisRenderer(field);
 	}
 
 	/**
@@ -61,6 +69,9 @@ public class TetrisGame
 	 */
 	public void play() throws InterruptedException
 	{
+		// TODO: assign a random piece
+		currentPiece = new ShapeLine(field, 0, 0);
+		
 		// run the main game loop
 		long sleepTargetMs = 1000 / TARGET_FRAMERATE;
 		while (!endGame)
@@ -93,6 +104,7 @@ public class TetrisGame
 
 		// TODO: check for complete lines and add them to the score
 
-		// TODO: draw to screen
+		// draw screen
+		renderer.draw(currentPiece);
 	}
 }
