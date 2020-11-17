@@ -93,6 +93,9 @@ public class TetrisGame
 	void onUpdate()
 	{
 		// TODO: handle player movement
+		
+		//rotation yeah
+		currentPiece.rotate();
 
 		// move the current piece down by one
 		if (!currentPiece.moveDown())

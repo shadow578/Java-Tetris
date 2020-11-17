@@ -74,7 +74,10 @@ public abstract class Shape
 	 * 
 	 * @return the blocks of this shape
 	 */
-	public abstract char[][] getBlocks();
+	public char[][] getBlocks()
+	{
+		return getBlocksForRotation(rotation);
+	}
 
 	/**
 	 * rotate the block 90� clockwise
@@ -119,5 +122,37 @@ public abstract class Shape
 		// we collided! undo movement
 		x -= amount;
 		return false;
+	}
+
+	/**
+	 * get the shape's blocks for a given rotation
+	 * @param rotation the rotation of the shape, in degree (0 - 270)
+	 * @return the blocks for a given rotation
+	 */
+	protected abstract char[][] getBlocksForRotation(int rotation);
+
+	/**
+	 * helper to construct a char[][] blocks array from strings
+	 * Make sure that all strings have the same length!
+	 * 
+	 * Usage Example:
+	 * {@code blocksHelper("  # ", "  # ", "  # ", "  # ")}
+	 * 
+	 * @param lines the y lines of the shape
+	 * @return the shape's char[][] blocks
+	 */
+	protected char[][] blocksHelper(String... lines)
+	{
+		// prepare blocks array
+		int w = lines[0].length();
+		int h = lines.length;
+		char[][] blocks = new char[w][h];
+
+		// copy chars into blocks array
+		for (int x = 0; x < w; x++)
+			for (int y = 0; y < h; y++)
+				blocks[x][y] = lines[y].charAt(x);
+
+		return blocks;
 	}
 }
