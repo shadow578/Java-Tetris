@@ -99,4 +99,96 @@ public class PlayField
 	{
 		return get(x, y) == BLANK;
 	}
+	
+	/**
+	 * place a shape on the play field. 
+	 * This does NOT do any collision checks. do those beforehand with isColliding().
+	 * This, however, does bound checks using isOutOfBounds(). if out of bounds, nothing is placed
+	 * @param shape the shape to place
+	 */
+	public void placeShape(Shape shape)
+	{
+		// do not place if out of bounds
+		if (isOutOfBounds(shape))
+			return;
+
+		// get shape details
+		int sx = shape.getX();
+		int sy = shape.getY();
+		int sw = shape.getWidth();
+		int sh = shape.getHeight();
+		char[][] blocks = shape.getBlocks();
+
+		// add non- blank blocks to field
+		for (int x = 0; x < sw; x++)
+			for (int y = 0; y < sh; y++)
+				if (blocks[x][y] != BLANK)
+					set(x + sx, y + sy, blocks[x][y]);
+	}
+
+	/**
+	 * check if any block of the shape is out of bounds of the play field
+	 * @param shape the shape to check
+	 * @return is the shape out of bounds?
+	 */
+	public boolean isOutOfBounds(Shape shape)
+	{
+		// get shape details
+		int sx = shape.getX();
+		int sy = shape.getY();
+		int sw = shape.getWidth();
+		int sh = shape.getHeight();
+		char[][] blocks = shape.getBlocks();
+
+		// check if any (non- blank) block is out of bounds
+		// abort on the first out- of- bounds block
+		for (int x = 0; x < sw; x++)
+			for (int y = 0; y < sh; y++)
+				if (blocks[x][y] != BLANK
+						&& isOutOfBounds(x + sx, y + sy))
+					return true; // block is out of bounds!
+
+		// no block was out of bounds
+		return false;
+	}
+
+	/**
+	 * check if the shape is out of bounds of the play field or collides with any static blocks
+	 * @param shape the shape to check
+	 * @return does the shape collide?
+	 */
+	public boolean checkCollision(Shape shape)
+	{
+		// check out of bounds (counts as collision)
+		if (isOutOfBounds(shape))
+			return true;
+
+		// get shape details
+		int sx = shape.getX();
+		int sy = shape.getY();
+		int sw = shape.getWidth();
+		int sh = shape.getHeight();
+		char[][] blocks = shape.getBlocks();
+
+		// check if any non- blank shape block overlaps with any non- blank static block
+		for (int x = 0; x < sw; x++)
+			for (int y = 0; y < sh; y++)
+				if (blocks[x][y] != BLANK && !isBlank(x + sx, y + sy))
+					return true;
+
+		// no collision found
+		return false;
+	}
+
+	/**
+	 * check if the x/y point is out ouf bounds of the play field
+	 * @param x the x coord of the point
+	 * @param y the y coord of the point
+	 * @return is the point out of bounds?
+	 */
+	boolean isOutOfBounds(int x, int y)
+	{
+		return x < 0 || x >= width
+				|| y < 0 || y >= height;
+	}
 }
