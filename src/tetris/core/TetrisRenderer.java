@@ -17,6 +17,11 @@ public class TetrisRenderer extends Renderer
 	static final char BLOCK = '█';
 
 	/**
+	 * how wide blocks are rendered
+	 */
+	static final char BLOCK_WIDTH = 2;
+
+	/**
 	 * the play field to render
 	 */
 	final PlayField field;
@@ -106,7 +111,8 @@ public class TetrisRenderer extends Renderer
 			}
 
 			// draw the block
-			canvas.append(block);
+			for (int w = 0; w < BLOCK_WIDTH; w++)
+				canvas.append(block);
 		}
 	}
 
@@ -125,7 +131,7 @@ public class TetrisRenderer extends Renderer
 
 		// ... print the score string and fill to width with spaces ...
 		canvas.append(scoreStr);
-		for (int i = 0; i < (field.getWidth() - scoreStr.length()); i++)
+		for (int i = 0; i < (getFieldRenderWidth() - scoreStr.length()); i++)
 			canvas.append(" ");
 
 		// ... and end with the right "rail"
@@ -133,7 +139,7 @@ public class TetrisRenderer extends Renderer
 
 		// bottom line
 		canvas.append("  ╠");
-		for (int i = 0; i < field.getWidth(); i++)
+		for (int i = 0; i < getFieldRenderWidth(); i++)
 			canvas.append("═");
 		canvas.append("╣" + System.lineSeparator());
 	}
@@ -145,7 +151,7 @@ public class TetrisRenderer extends Renderer
 	void drawHeader(StringBuilder canvas)
 	{
 		canvas.append("  ╔");
-		for (int i = 0; i < field.getWidth(); i++)
+		for (int i = 0; i < getFieldRenderWidth(); i++)
 			canvas.append("═");
 		canvas.append("╗" + System.lineSeparator());
 	}
@@ -157,7 +163,7 @@ public class TetrisRenderer extends Renderer
 	void drawFooter(StringBuilder canvas)
 	{
 		canvas.append("  ╚");
-		for (int i = 0; i < field.getWidth(); i++)
+		for (int i = 0; i < getFieldRenderWidth(); i++)
 			canvas.append("═");
 		canvas.append("╝" + System.lineSeparator());
 	}
@@ -169,5 +175,14 @@ public class TetrisRenderer extends Renderer
 	{
 		System.out.print("\033[H\033[2J" + System.lineSeparator());
 		System.out.flush();
+	}
+
+	/**
+	 * 
+	 * @return the rendered width of the game field. Use this as the field may be rendered with double width
+	 */
+	int getFieldRenderWidth()
+	{
+		return field.getWidth() * BLOCK_WIDTH;
 	}
 }
