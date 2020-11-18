@@ -172,7 +172,7 @@ public class TetrisGame
 			return false;
 
 		// check rotate (up arrow and r)
-		if (keyboard.isDown(NativeKeyEvent.VC_UP) || keyboard.isDown(NativeKeyEvent.VC_R))
+		if (keyboard.wasPressed(NativeKeyEvent.VC_UP) || keyboard.wasPressed(NativeKeyEvent.VC_R))
 			currentPiece.rotate();
 
 		// check LEFT movement (left arrow and a)

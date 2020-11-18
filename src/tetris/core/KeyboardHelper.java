@@ -17,6 +17,12 @@ public class KeyboardHelper
 	ArrayList<Integer> downKeyCodes = new ArrayList<Integer>();
 
 	/**
+	 * a list of all key's keycodes that were checked using wasPressed and weren't released since then
+	 * (avoid auto- repeat of keystrokes that jNativeHook likes to do)
+	 */
+	ArrayList<Integer> pressBlockedKeyCodes = new ArrayList<Integer>();
+
+	/**
 	 * try to init the keyboard hook
 	 * @return was init successfull?
 	 */
@@ -71,9 +77,9 @@ public class KeyboardHelper
 	 */
 	public boolean wasPressed(int keyCode)
 	{
-		if (downKeyCodes.contains(keyCode))
+		if (downKeyCodes.contains(keyCode) && !pressBlockedKeyCodes.contains(keyCode))
 		{
-			downKeyCodes.remove((Integer) keyCode);
+			pressBlockedKeyCodes.add(keyCode);
 			return true;
 		}
 		return false;
@@ -106,6 +112,7 @@ public class KeyboardHelper
 		public void nativeKeyReleased(NativeKeyEvent e)
 		{
 			downKeyCodes.remove((Integer) e.getKeyCode());
+			pressBlockedKeyCodes.remove((Integer) e.getKeyCode());
 		}
 
 		@Override
