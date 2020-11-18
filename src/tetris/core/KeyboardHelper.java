@@ -27,12 +27,29 @@ public class KeyboardHelper
 			disableNativeHookLogs();
 			GlobalScreen.registerNativeHook();
 			GlobalScreen.addNativeKeyListener(new KeyListener());
+			return true;
 		} catch (NativeHookException e)
 		{
 			e.printStackTrace();
 			return false;
 		}
-		return true;
+	}
+
+	/**
+	 * try to disable and dispose the keyboard hook
+	 * @return was disabling successfull?
+	 */
+	public boolean dispose()
+	{
+		try
+		{
+			GlobalScreen.unregisterNativeHook();
+			return true;
+		} catch (NativeHookException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/**

@@ -85,7 +85,7 @@ public class TetrisGame
 		// init keyboard hooks
 		if (!keyboard.init())
 		{
-			System.out.println("Error in keyboard initialization! Exiting game...");
+			System.err.println("Error in keyboard initialization! Exiting game...");
 			return;
 		}
 
@@ -104,6 +104,14 @@ public class TetrisGame
 			// sleep some ms to reach target framerate stable
 			Thread.sleep(Math.max(0, sleepTargetMs - updateDuration));
 		}
+
+		// game ended:
+		// disable keyboard input
+		if (!keyboard.dispose())
+			System.err.println("error disposing keyboard! \nYou may have to force- exit the game.");
+
+		// TODO: show gameover screen
+		System.out.printf("%nGame Over%nScore: %.2f", score);
 	}
 
 	/**
@@ -130,12 +138,15 @@ public class TetrisGame
 	 */
 	void handlePieceGravity()
 	{
+		// do not update the piece when there is none
+		if (currentPiece == null)
+			return;
+
 		// move the current piece down by one
 		if (!currentPiece.moveDown(FALL_SPEED))
 		{
 			// collided while moving, place the piece at the current position
-			field.placeShape(currentPiece);
-			getNewPiece();
+			onPieceCollided();
 		}
 
 		// if user pressed DOWN, move the current piece to it's final position
@@ -146,8 +157,7 @@ public class TetrisGame
 				;
 
 			// collided while moving, place the piece at the current position
-			field.placeShape(currentPiece);
-			getNewPiece();
+			onPieceCollided();
 		}
 	}
 
@@ -176,6 +186,25 @@ public class TetrisGame
 
 		// move the current piece
 		return !currentPiece.moveHorizontal(move);
+	}
+
+	/**
+	 * called when the current piece collided with something and should be placed
+	 */
+	void onPieceCollided()
+	{
+		// place current piece and get a new one
+		field.placeShape(currentPiece);
+		getNewPiece();
+
+		// check if the new piece collides
+		if (field.checkCollision(currentPiece))
+		{
+			// new piece instantly collided with something, == game- over
+			// exit the main game loop and remove the current piece
+			endGame = true;
+			currentPiece = null;
+		}
 	}
 
 	/**
