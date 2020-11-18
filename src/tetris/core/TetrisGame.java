@@ -7,6 +7,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import tetris.core.model.PlayField;
 import tetris.core.model.Renderer;
 import tetris.core.model.Shape;
+import tetris.core.renderers.console.ConsoleRenderer;
 
 public class TetrisGame
 {
@@ -71,7 +72,7 @@ public class TetrisGame
 	public TetrisGame(int w, int h)
 	{
 		field = new PlayField(w, h);
-		renderer = new TetrisRenderer(field);
+		renderer = new ConsoleRenderer(field);
 		keyboard = new KeyboardHelper();
 	}
 
@@ -109,8 +110,8 @@ public class TetrisGame
 		if (!keyboard.dispose())
 			System.err.println("error disposing keyboard! \nYou may have to force- exit the game.");
 
-		// TODO: show gameover screen
-		System.out.printf("%nGame Over%nScore: %.2f", score);
+		// show gameover screen
+		renderer.drawGameOver(score);
 	}
 
 	/**
