@@ -12,9 +12,14 @@ public class TetrisRenderer extends Renderer
 	static final char BLANK = ' ';
 
 	/**
-	 * char to use for a block
+	 * char to use for a static block
 	 */
-	static final char BLOCK = '█';
+	static final char BLOCK_STATIC = '█';
+	
+	/**
+	 * char to use for a moving block
+	 */
+	static final char BLOCK_MOVING = '▓';
 
 	/**
 	 * how wide blocks are rendered
@@ -51,7 +56,7 @@ public class TetrisRenderer extends Renderer
 		╠══╬══╣
 		║  ║  ║
 		╚══╩══╝
-		█
+		█▒▓
 		*/
 
 		// render the field to a StringBuilder first
@@ -95,7 +100,7 @@ public class TetrisRenderer extends Renderer
 		for (int x = 0; x < field.getWidth(); x++)
 		{
 			// get block from play field to draw
-			char block = field.isBlank(x, y) ? BLANK : BLOCK;
+			char block = field.isBlank(x, y) ? BLANK : BLOCK_STATIC;
 
 			// check for block of moving shape
 			if (ms != null
@@ -109,7 +114,7 @@ public class TetrisRenderer extends Renderer
 				int my = y - ms.getY();
 				char[][] mblocks = ms.getBlocks();
 				if (mblocks[mx][my] != PlayField.BLANK)
-					block = BLOCK;
+					block = BLOCK_MOVING;
 			}
 
 			// draw the block

@@ -18,7 +18,7 @@ public final class ShapeRegistry
 	 */
 	public static Shape getRandomShape(Random random, PlayField playField, int sx, int sy)
 	{
-		switch (random.nextInt(10))
+		switch (random.nextInt(7))
 		{
 		case 0:
 		default: // default to a line piece
