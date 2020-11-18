@@ -4,47 +4,43 @@ import tetris.core.model.PlayField;
 import tetris.core.model.Shape;
 
 /**
- * the "Line" tetris shape
+ * the "Z" tetris shape
  */
-public class ShapeLine extends Shape
+public class ShapeZ extends Shape
 {
 	/**
 	 * blocks for 0 deg rotation
 	 */
 	final char[][] ROT_0 = blocksHelper(
-			"  # ",
-			"  # ",
-			"  # ",
-			"  # ");
+			"## ",
+			" ##",
+			"   ");
 
 	/**
 	 * blocks for 90 deg rotation
 	 */
 	final char[][] ROT_90 = blocksHelper(
-			"    ",
-			"    ",
-			"####",
-			"    ");
+			"  #",
+			" ##",
+			" # ");
 
 	/**
 	 * blocks for 180 deg rotation
 	 */
 	final char[][] ROT_180 = blocksHelper(
-			" #  ",
-			" #  ",
-			" #  ",
-			" #  ");
+			"   ",
+			"## ",
+			" ##");
 
 	/**
 	 * blocks for 270 deg rotation
 	 */
 	final char[][] ROT_270 = blocksHelper(
-			"    ",
-			"####",
-			"    ",
-			"    ");
+			" # ",
+			"## ",
+			"#  ");
 
-	public ShapeLine(PlayField playField, int sx, int sy)
+	public ShapeZ(PlayField playField, int sx, int sy)
 	{
 		super(playField, sx, sy);
 	}

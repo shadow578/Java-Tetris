@@ -7,7 +7,6 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import tetris.core.model.PlayField;
 import tetris.core.model.Renderer;
 import tetris.core.model.Shape;
-import tetris.core.shapes.ShapeLine;
 
 public class TetrisGame
 {
@@ -212,6 +211,6 @@ public class TetrisGame
 	 */
 	void getNewPiece()
 	{
-		currentPiece = new ShapeLine(field, 0, 0);
+		currentPiece = ShapeRegistry.getRandomShape(rng, field, 0, 0);
 	}
 }

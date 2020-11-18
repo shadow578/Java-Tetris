@@ -16,7 +16,7 @@ public abstract class Shape
 	 * rotation of this shape, in degree (0 - 270)
 	 */
 	int rotation = 0;
-
+	
 	/**
 	 * create a new shape with the given starting position
 	 * @param field the play field we are on
