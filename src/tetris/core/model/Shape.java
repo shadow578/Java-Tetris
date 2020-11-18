@@ -1,7 +1,7 @@
 package tetris.core.model;
 
 public abstract class Shape
-{	
+{
 	/**
 	 * the playfield we are placed on
 	 */
@@ -36,7 +36,7 @@ public abstract class Shape
 	 */
 	public int getX()
 	{
-		return (int)x;
+		return (int) x;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public abstract class Shape
 	 */
 	public int getY()
 	{
-		return (int)y;
+		return (int) y;
 	}
 
 	/**
@@ -80,13 +80,26 @@ public abstract class Shape
 	}
 
 	/**
-	 * rotate the block 90� clockwise
+	 * rotate the shape by 90 deg clockwise
+	 * if the shape colides when rotated, the rotation is undone and false is returned
+	 * @return was the shape rotated successfully? if false, we collided with something
 	 */
-	public void rotate()
+	public boolean rotate()
 	{
+		// rotate by 90 degrees
 		rotation += 90;
 		if (rotation >= 360)
 			rotation = 0;
+
+		// check for collision
+		if (!field.checkCollision(this))
+			return true;
+
+		// we collided, undo rotation
+		rotation -= 90;
+		if (rotation < 0)
+			rotation = 270;
+		return false;
 	}
 
 	/**
