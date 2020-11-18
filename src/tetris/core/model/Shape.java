@@ -16,7 +16,7 @@ public abstract class Shape
 	 * rotation of this shape, in degree (0 - 270)
 	 */
 	int rotation = 0;
-	
+
 	/**
 	 * create a new shape with the given starting position
 	 * @param field the play field we are on
@@ -157,6 +157,25 @@ public abstract class Shape
 	 */
 	protected char[][] blocksHelper(String... lines)
 	{
+		return blocksHelper('#', lines);
+	}
+
+	/**
+	 * helper to construct a char[][] blocks array from strings
+	 * Make sure that all strings have the same length!
+	 * 
+	 * Use a space ' ' for a "air" block and a hashtag '#' for a "solid" block.
+	 * These are later replaced for the meta- character c
+	 * 
+	 * Usage Example:
+	 * {@code blocksHelper("  # ", "  # ", "  # ", "  # ")}
+	 * 
+	 * @param c the metadata char to use for this shape (used by TetrisRenderer for coloring)
+	 * @param lines the y lines of the shape
+	 * @return the shape's char[][] blocks
+	 */
+	protected char[][] blocksHelper(char c, String... lines)
+	{
 		// prepare blocks array
 		int w = lines[0].length();
 		int h = lines.length;
@@ -165,7 +184,10 @@ public abstract class Shape
 		// copy chars into blocks array
 		for (int x = 0; x < w; x++)
 			for (int y = 0; y < h; y++)
-				blocks[x][y] = lines[y].charAt(x);
+				if (lines[y].charAt(x) == '#')
+					blocks[x][y] = c;
+				else
+					blocks[x][y] = PlayField.BLANK;
 
 		return blocks;
 	}
