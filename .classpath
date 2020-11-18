@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/cnienhaus/source/repos/Java/tetris/lib/jnativehook-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cnienhaus/source/repos/Java/tetris/lib/JColor-5.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

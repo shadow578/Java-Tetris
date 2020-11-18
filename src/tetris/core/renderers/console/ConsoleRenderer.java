@@ -1,5 +1,7 @@
 package tetris.core.renderers.console;
 
+import com.diogonunes.jcolor.Attribute;
+
 import tetris.core.model.PlayField;
 import tetris.core.model.Renderer;
 import tetris.core.model.Shape;
@@ -30,6 +32,12 @@ public class ConsoleRenderer extends Renderer
 	 * how many chars are added to the left for padding
 	 */
 	static final int LEFT_PADDING = 3;
+
+	/**
+	 * should we render in color?
+	 * Only works in good terminals, not eclipse's integrated one
+	 */
+	static final boolean ENABLE_COLOR_RENDERING = true;
 
 	/**
 	 * the play field to render
@@ -74,13 +82,13 @@ public class ConsoleRenderer extends Renderer
 		for (int y = 0; y < field.getHeight(); y++)
 		{
 			// draw the left rail
-			canvas.vRail()
+			canvas.vRail();
 
-					// then the tetris line
-					.tetrisYLine(field, ms, y, BLOCK_WIDTH, BLANK, BLOCK_STATIC, BLOCK_MOVING)
+			// then the tetris line
+			drawTetrisYLine(ms, y);
 
-					// last the right rail with a line break
-					.vRail().ln();
+			// last the right rail with a line break
+			canvas.vRail().ln();
 		}
 
 		// draw the footer line
@@ -125,6 +133,97 @@ public class ConsoleRenderer extends Renderer
 		// draw canvas to console
 		clearConsole();
 		System.out.print(canvas.toString());
+	}
+
+	/**
+	 * draw a Y line of the tetris game field
+	 * @param ms the current moving shape to overlay
+	 * @param y the Y value to draw the line of
+	 * @return the canvas drawn on
+	 */
+	void drawTetrisYLine(Shape ms, int y)
+	{
+		for (int x = 0; x < field.getWidth(); x++)
+		{
+			// get block from play field to draw (meta for metadata- information and render
+			// for what we actuall draw)
+			char blockMeta = field.get(x, y);
+			char blockRender = blockMeta == PlayField.BLANK ? BLANK : BLOCK_STATIC;
+
+			// check for block of moving shape
+			if (ms != null
+					&& ms.getX() <= x
+					&& ms.getY() <= y
+					&& (ms.getX() + ms.getWidth()) > x
+					&& (ms.getY() + ms.getHeight()) > y)
+			{
+				// inside the shape, get block to draw from shape
+				int mx = x - ms.getX();
+				int my = y - ms.getY();
+				char[][] mblocks = ms.getBlocks();
+				if (mblocks[mx][my] != PlayField.BLANK)
+				{
+					blockMeta = mblocks[mx][my];
+					blockRender = BLOCK_MOVING;
+				}
+			}
+
+			// get color for char
+			Attribute color = getColorForMeta(blockMeta);
+
+			// draw the block (colored, maybe?)
+			for (int w = 0; w < BLOCK_WIDTH; w++)
+				if (ENABLE_COLOR_RENDERING && color != null)
+				{
+					// draw in color
+					canvas.setColorEnabled(true)
+							.setForegroundColor(color)
+							.append(blockRender + "")
+							.setColorEnabled(false);
+				}
+				else // draw without color
+					canvas.append(blockRender + "");
+		}
+	}
+
+	/**
+	 * get the color attributes for a (meta) char
+	 * 
+	 * b for blue
+	 * s for black
+	 * c for cyan
+	 * g for green
+	 * m for magenta
+	 * r for red
+	 * w for white
+	 * y for yellow
+	 * 
+	 * @param meta the meta char to use (case- insensitive)
+	 * @return the color attributes, or null if invalid meta char
+	 */
+	Attribute getColorForMeta(char meta)
+	{
+		switch (Character.toLowerCase(meta))
+		{
+		case 'b':
+			return Attribute.BLUE_TEXT();
+		case 's':
+			return Attribute.BLACK_TEXT();
+		case 'c':
+			return Attribute.CYAN_TEXT();
+		case 'g':
+			return Attribute.GREEN_TEXT();
+		case 'm':
+			return Attribute.MAGENTA_TEXT();
+		case 'r':
+			return Attribute.RED_TEXT();
+		case 'w':
+			return Attribute.WHITE_TEXT();
+		case 'y':
+			return Attribute.YELLOW_TEXT();
+		default:
+			return null;
+		}
 	}
 
 	/**

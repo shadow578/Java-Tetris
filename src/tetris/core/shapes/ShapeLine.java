@@ -9,9 +9,14 @@ import tetris.core.model.Shape;
 public class ShapeLine extends Shape
 {
 	/**
+	 * the meta char to use for this shape
+	 */
+	final char META = 'c';
+	
+	/**
 	 * blocks for 0 deg rotation
 	 */
-	final char[][] ROT_0 = blocksHelper(
+	final char[][] ROT_0 = blocksHelper(META,
 			"  # ",
 			"  # ",
 			"  # ",
@@ -20,7 +25,7 @@ public class ShapeLine extends Shape
 	/**
 	 * blocks for 90 deg rotation
 	 */
-	final char[][] ROT_90 = blocksHelper(
+	final char[][] ROT_90 = blocksHelper(META,
 			"    ",
 			"    ",
 			"####",
@@ -29,7 +34,7 @@ public class ShapeLine extends Shape
 	/**
 	 * blocks for 180 deg rotation
 	 */
-	final char[][] ROT_180 = blocksHelper(
+	final char[][] ROT_180 = blocksHelper(META,
 			" #  ",
 			" #  ",
 			" #  ",
@@ -38,7 +43,7 @@ public class ShapeLine extends Shape
 	/**
 	 * blocks for 270 deg rotation
 	 */
-	final char[][] ROT_270 = blocksHelper(
+	final char[][] ROT_270 = blocksHelper(META,
 			"    ",
 			"####",
 			"    ",
