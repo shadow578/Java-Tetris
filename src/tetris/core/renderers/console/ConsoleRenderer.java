@@ -34,12 +34,6 @@ public class ConsoleRenderer extends Renderer
 	static final int LEFT_PADDING = 3;
 
 	/**
-	 * should we render in color?
-	 * Only works in good terminals, not eclipse's integrated one
-	 */
-	static final boolean ENABLE_COLOR_RENDERING = true;
-
-	/**
 	 * the play field to render
 	 */
 	final PlayField field;
@@ -48,6 +42,12 @@ public class ConsoleRenderer extends Renderer
 	 * the canvas we draw on
 	 */
 	final StringCanvas canvas;
+	
+	/**
+	 * should we render in color?
+	 * Only works in good terminals, not eclipse's integrated one
+	 */
+	boolean enableColorRendering = false;
 
 	/**
 	 * initialize a renderer for the given play field
@@ -58,6 +58,15 @@ public class ConsoleRenderer extends Renderer
 		super(playField);
 		field = playField;
 		canvas = new StringCanvas();
+	}
+	
+	/**
+	 * enable or disable colorful rendering
+	 * @param enable should we render in color?
+	 */
+	public void setColorRenderingEnabled(boolean enable)
+	{
+		enableColorRendering = enable;
 	}
 
 	/**
@@ -173,7 +182,7 @@ public class ConsoleRenderer extends Renderer
 
 			// draw the block (colored, maybe?)
 			for (int w = 0; w < BLOCK_WIDTH; w++)
-				if (ENABLE_COLOR_RENDERING && color != null)
+				if (enableColorRendering && color != null)
 				{
 					// draw in color
 					canvas.setColorEnabled(true)

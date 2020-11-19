@@ -6,8 +6,9 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 
 import tetris.core.model.PlayField;
 import tetris.core.model.Renderer;
+import tetris.core.model.RendererFactory;
 import tetris.core.model.Shape;
-import tetris.core.renderers.console.ConsoleRenderer;
+import tetris.core.renderers.console.ConsoleRendererFactory;
 
 public class TetrisGame
 {
@@ -57,22 +58,32 @@ public class TetrisGame
 	double score = 0;
 
 	/**
-	 * init the tetris game with a default game field size of 10x20 blocks
+	 * init the tetris game with a default game field size of 10x20 blocks and default renderer
 	 */
 	public TetrisGame()
 	{
-		this(10, 20);
+		this(10, 20, new ConsoleRendererFactory());
+	}
+
+	/**
+	 * init the tetris game with a default game field size of 10x20 blocks
+	 * @param renderFactory a factory for the renderer to use
+	 */
+	public TetrisGame(RendererFactory renderFactory)
+	{
+		this(10, 20, renderFactory);
 	}
 
 	/**
 	 * init the tetris game with a game field size of WxH blocks
 	 * @param w the width of the play field
 	 * @param h the height of the play field
+	 * @param renderFactory a factory for the renderer to use
 	 */
-	public TetrisGame(int w, int h)
+	public TetrisGame(int w, int h, RendererFactory renderFactory)
 	{
 		field = new PlayField(w, h);
-		renderer = new ConsoleRenderer(field);
+		renderer = renderFactory.build(field);
 		keyboard = new KeyboardHelper();
 	}
 
